@@ -1,11 +1,11 @@
 # Binox FDE Assessment: Autonomous Sales AI Pipeline
 
-## 🚀 Overview
+## Overview
 This repository contains a multi-agent, self-improving AI sales orchestration pipeline built in n8n. The system autonomously conducts sales simulations, grades its own performance, and iteratively rewrites its core system prompt to handle new objections dynamically.
 
 Unlike standard static chatbots, this architecture is **stateful**. It remembers past failures and patches its own logic without human intervention, proving out a foundational "AI Flywheel" concept for enterprise sales automation.
 
-### 🛠️ Tech Stack
+### Tech Stack
 * **Orchestration:** n8n
 * **LLMs:** Google Gemini 1.5 Flash (Agent, Analyst, Director nodes)
 * **Voice / TTS:** Deepgram Aura
@@ -13,7 +13,7 @@ Unlike standard static chatbots, this architecture is **stateful**. It remembers
 
 ---
 
-## 🧠 Architecture & Key Engineering Wins
+## Architecture & Key Engineering Wins
 
 ### 1. Resilient API Failover (Graceful Degradation)
 During the initial build phase, the primary TTS provider (ElevenLabs) triggered a 401 IP/Rate Limit block. Instead of allowing the pipeline to crash, the system was dynamically re-routed to use **Deepgram Aura**. This pivot ensured sub-250ms audio latency and uninterrupted execution, demonstrating a core Forward Deployed Engineering principle: *never let external dependencies break the prototype.*
@@ -31,7 +31,7 @@ The workflow utilizes a 3-tier multi-agent architecture:
 
 ---
 
-## 📈 Future Scalability (Production Considerations)
+## Future Scalability (Production Considerations)
 
 For the scope of this prototype, the pipeline executes sequentially. However, to scale this to a production environment and handle multi-turn conversations without overloading the database, I would implement the following architectural updates:
 
@@ -41,7 +41,7 @@ For the scope of this prototype, the pipeline executes sequentially. However, to
 
 ---
 
-## 🎥 Demo & Proof of Execution
+## Demo & Proof of Execution
 
 * **Video Walkthrough:** [Insert Link to your Loom Video Here]
 * **Workflow Canvas:**
