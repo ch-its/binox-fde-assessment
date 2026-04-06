@@ -71,10 +71,12 @@ Create two tables in your public schema:
 ## Demo & Proof of Execution
 
   * **Video Walkthrough:** [Loom Demo](https://www.loom.com/share/2ec3a817ecdb4fc19053db43ab490625)
-  * **Workflow Canvas:**
-    \<img width="1086" height="322" alt="n8n architecture" src="[https://github.com/user-attachments/assets/e7e55e35-132c-4d41-8f8b-fabba32ba58f](https://github.com/user-attachments/assets/e7e55e35-132c-4d41-8f8b-fabba32ba58f)" /\>
+  * **Workflow Canvas:**<img width="1086" height="322" alt="n8n architecture" src="https://github.com/user-attachments/assets/5ac5da20-ddb7-4c55-8d00-456c3b0b2a17" />
+
+   
   * **Database Proof (Iteration Cycle):**
-    \<img width="1440" height="772" alt="Supabase Versions Proof" src="[https://github.com/user-attachments/assets/98e2e1a8-e709-4a8a-92aa-1a1cd51f8901](https://github.com/user-attachments/assets/98e2e1a8-e709-4a8a-92aa-1a1cd51f8901)" /\>
+   
+<img width="1440" height="743" alt="Screenshot 2026-04-06 at 2 12 24 PM" src="https://github.com/user-attachments/assets/ea931230-c3ee-405d-a95f-fe3aa7eecf5b" />
 
 -----
 
