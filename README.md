@@ -26,6 +26,7 @@ graph TD
     E -->|Yes: Extracts Objection| F(Sales Director: Rewrites Prompt)
     F -->|Increments Version| G[(Supabase: Save vNew)]
     E -->|No| H[End Cycle]
+```
 
 -----
 
