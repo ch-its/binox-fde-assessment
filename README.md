@@ -48,7 +48,8 @@ For the scope of this prototype, the pipeline executes sequentially. However, to
 <img width="1086" height="322" alt="n8n architecture" src="https://github.com/user-attachments/assets/e7e55e35-132c-4d41-8f8b-fabba32ba58f" />
 
 * **Database State (Proof of Loop):**
-![Supabase Outcomes and Scripts](Insert Link to your Supabase screenshot here showing Versions 1.0, 1.1, and 1.2)
+<img width="1440" height="772" alt="Screenshot 2026-04-06 at 10 47 18 AM" src="https://github.com/user-attachments/assets/98e2e1a8-e709-4a8a-92aa-1a1cd51f8901" />
+
 
 ---
 *Built for the Binox Forward Deployed Engineer Assessment.*
