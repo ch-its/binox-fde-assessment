@@ -93,7 +93,7 @@
           "parameters": [
             {
               "name": "Authorization",
-              "value": "Token 13dc26ec0cf4c5bba10cac433dd464b46787ff33"
+              "value": "Token DEEP Gram Token"
             }
           ]
         },
@@ -127,7 +127,7 @@
     {
       "parameters": {
         "promptType": "define",
-        "text": "=You are an expert Sales Analyst. Analyze the following sales call transcript.\n\nDid the user book a demo? Answer true or false.\n\nWhat was the user's primary objection? Keep it to 2-3 words (e.g., \"Too busy\", \"Price\", \"Not interested\").\nOutput ONLY valid JSON matching this exact structure: {\"success_status\": \"false\", \"objection\": \"Too busy\"}\n\nTranscript:\nUser: I am too busy to look at new software right now.\nAgent: {{ $json.output }}",
+        "text": "=You are an expert Sales Analyst. Analyze the following sales call transcript.\n\n1. Did the user book a demo? (true/false)\n2. What was the primary objection? (e.g., \"Price\", \"Too Busy\", \"Competitor\")\n\nOutput ONLY valid JSON. Use this structure as a template but fill in the values based on the transcript:\n{\"success_status\": \"false\", \"objection\": \"insert_objection_here\"}\n\nTranscript:\n{{ $node[\"AI Agent\"].parameter[\"text\"] }}\nAgent: {{ $json.output }}",
         "batching": {}
       },
       "type": "@n8n/n8n-nodes-langchain.chainLlm",
@@ -551,7 +551,7 @@
     "executionOrder": "v1",
     "binaryMode": "separate"
   },
-  "versionId": "9dcaeef9-f843-4295-9205-2c70643c005e",
+  "versionId": "23844655-8a7f-4b0c-8032-5478e6419a9d",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "a967902db0f53bffa776fb9a1bacb5577f4f7c70ecba54c0b5c25b15377f9b0d"
