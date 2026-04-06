@@ -45,7 +45,8 @@ For the scope of this prototype, the pipeline executes sequentially. However, to
 
 * **Video Walkthrough:** [Insert Link to your Loom Video Here]
 * **Workflow Canvas:**
-![n8n Workflow Architecture](Insert Link to your n8n screenshot here)
+<img width="1086" height="322" alt="n8n architecture" src="https://github.com/user-attachments/assets/e7e55e35-132c-4d41-8f8b-fabba32ba58f" />
+
 * **Database State (Proof of Loop):**
 ![Supabase Outcomes and Scripts](Insert Link to your Supabase screenshot here showing Versions 1.0, 1.1, and 1.2)
 
