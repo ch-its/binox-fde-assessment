@@ -1,56 +1,81 @@
 # Binox FDE Assessment: Autonomous Sales AI Pipeline
 
 ## Overview
-This repository contains a multi-agent, self-improving AI sales orchestration pipeline built in n8n. The system autonomously conducts sales simulations, grades its own performance, and iteratively rewrites its core system prompt to handle new objections dynamically.
 
-Unlike standard static chatbots, this architecture is **stateful**. It remembers past failures and patches its own logic without human intervention, proving out a foundational "AI Flywheel" concept for enterprise sales automation.
+This repository contains a multi-agent, stateful AI sales orchestration pipeline built in n8n. The system autonomously conducts sales simulations, grades its own performance, and iteratively rewrites its core system prompt to handle new objections dynamically.
+
+Unlike static chatbots, this architecture implements an **"AI Flywheel"**—a self-improving loop that minimizes human intervention and maximizes sales conversion over time.
 
 ### Tech Stack
-* **Orchestration:** n8n
-* **LLMs:** Google Gemini 1.5 Flash (Agent, Analyst, Director nodes)
-* **Voice / TTS:** Deepgram Aura
-* **Database:** Supabase (PostgreSQL)
 
----
+  * **Orchestration:** n8n
+  * **LLMs:** Google Gemini 1.5 Flash (Agent, Analyst, Director)
+  * **Voice / TTS:** Deepgram Aura
+  * **Database:** Supabase (PostgreSQL)
 
-## Architecture & Key Engineering Wins
+-----
 
-### 1. Resilient API Failover (Graceful Degradation)
-During the initial build phase, the primary TTS provider (ElevenLabs) triggered a 401 IP/Rate Limit block. Instead of allowing the pipeline to crash, the system was dynamically re-routed to use **Deepgram Aura**. This pivot ensured sub-250ms audio latency and uninterrupted execution, demonstrating a core Forward Deployed Engineering principle: *never let external dependencies break the prototype.*
+##  Architecture
 
-### 2. Dynamic State Management
-The AI Agent does not rely on a hardcoded, static prompt. A pre-execution Postgres node utilizes the following query:
-`SELECT * FROM Scripts ORDER BY version DESC LIMIT 1;`
-This guarantees the system dynamically fetches the most evolved script state before every single execution. 
+The workflow follows a closed-loop architectural pattern:
 
-### 3. The Autonomous Self-Improvement Loop
-The workflow utilizes a 3-tier multi-agent architecture:
-* **The Caller:** Executes the script and generates the conversational transcript.
-* **The Analyst:** Evaluates the transcript, extracts a boolean `success_status`, and isolates the specific prospect `objection` into structured JSON format.
-* **The Director:** Triggered conditionally via an n8n If-Node on failed calls. It parses the previous version string, mathematically increments it (e.g., v1.1 -> v1.2), dynamically patches the master prompt with a targeted rebuttal, and deploys the new code back to the production database.
+1.  **Fetch State:** Query the latest script version from Postgres.
+2.  **Execute:** Generate AI response and convert to speech via Deepgram.
+3.  **Analyze:** Extract objections into structured JSON.
+4.  **Optimize:** If the call failed, the "Director" agent patches the script and saves it as a new version.
 
----
+-----
 
-## Future Scalability (Production Considerations)
+##  Setup & Reproducibility
 
-For the scope of this prototype, the pipeline executes sequentially. However, to scale this to a production environment and handle multi-turn conversations without overloading the database, I would implement the following architectural updates:
+To reproduce this workflow, follow these steps:
 
-1. **Decouple the Loops:** Separate the real-time conversational loop (Frontend) from the asynchronous analytical loop (Backend).
-2. **Websockets vs. Webhooks:** Connect the AI Agent to a websocket (e.g., Twilio/Retell) for real-time, multi-turn voice interaction. Trigger the Analyst/Director pipeline via a webhook *only* after the `call_status` hits 'completed' to prevent the AI from mutating the system prompt mid-conversation.
-3. **RAG Integration:** Instead of endlessly appending rebuttals to the main prompt (which would eventually hit token limits), the Analyst would save successful rebuttals to a vector database. The Agent would then use Retrieval-Augmented Generation to pull only the relevant objection-handling logic in real-time.
+### 1\. Database Setup (Supabase/Postgres)
 
----
+Create two tables in your public schema:
+
+  * **`scripts`**: Columns: `id` (uuid), `version` (numeric), `system_prompt` (text).
+      * *Initial Data:* Insert one row with version `1.0` and your base sales pitch.
+  * **`outcomes`**: Columns: `id` (uuid), `script_version` (numeric), `transcript` (text), `success_status` (text), `improvement_suggestion` (text).
+
+### 2\. n8n Configuration
+
+1.  Import the `Binox_Sales_Pipeline.json` file into your n8n instance.
+2.  Configure the following **Credentials**:
+      * **Postgres:** Connect to your Supabase instance.
+      * **Google Gemini:** Provide your Google AI Studio API key.
+3.  In the **HTTP Request (Deepgram)** node, replace the header value with your Deepgram API Key: `Token YOUR_KEY_HERE`.
+
+-----
+
+##  Criteria-Based Self-Assessment
+
+### 1\. Technical Execution 
+
+  * **State Management:** Utilized `ORDER BY version DESC LIMIT 1` to ensure the system is truly dynamic and not relying on hardcoded prompts.
+  * **Error Handling:** Implemented `onError: continueErrorOutput` on critical API nodes to prevent workflow crashes and ensure outcomes are logged even if voice generation fails.
+  * **Clean Logic:** Used structured JSON output from LLM chains to drive conditional logic (If-Nodes), ensuring high reliability in the decision-making loop.
+
+### 2\. Creativity & Constraint Handling 
+
+  * **The Pivot:** Encountered a 401 rate-limit block with ElevenLabs during development.
+  * **Trade-off Documentation:** To maintain the delivery timeline and ensure a working prototype, I pivoted to **Deepgram Aura**. This was a strategic choice; Deepgram offers significantly lower latency (\<250ms), which is superior for real-time sales applications.
+
+### 3\. Business Impact Reasoning 
+
+  * **ROI focused:** This solution directly addresses the high cost of manual sales training. By allowing an AI to autonomously learn how to handle objections like "Too busy" or "Too expensive," we reduce the cost-per-lead and increase the "speed to lead" for clients.
+  * **Scalability:** The architecture proves that a single engineer can manage a fleet of "evolving" agents that get smarter with every failed call.
+
+-----
 
 ## Demo & Proof of Execution
 
-* **Video Walkthrough:**
-https://www.loom.com/share/2ec3a817ecdb4fc19053db43ab490625 
-* **Workflow Canvas:**
-<img width="1086" height="322" alt="n8n architecture" src="https://github.com/user-attachments/assets/e7e55e35-132c-4d41-8f8b-fabba32ba58f" />
+  * **Video Walkthrough:** [Loom Demo](https://www.loom.com/share/2ec3a817ecdb4fc19053db43ab490625)
+  * **Workflow Canvas:**
+    \<img width="1086" height="322" alt="n8n architecture" src="[https://github.com/user-attachments/assets/e7e55e35-132c-4d41-8f8b-fabba32ba58f](https://github.com/user-attachments/assets/e7e55e35-132c-4d41-8f8b-fabba32ba58f)" /\>
+  * **Database Proof (Iteration Cycle):**
+    \<img width="1440" height="772" alt="Supabase Versions Proof" src="[https://github.com/user-attachments/assets/98e2e1a8-e709-4a8a-92aa-1a1cd51f8901](https://github.com/user-attachments/assets/98e2e1a8-e709-4a8a-92aa-1a1cd51f8901)" /\>
 
-* **Database State (Proof of Loop):**
-<img width="1440" height="772" alt="Screenshot 2026-04-06 at 10 47 18 AM" src="https://github.com/user-attachments/assets/98e2e1a8-e709-4a8a-92aa-1a1cd51f8901" />
+-----
 
-
----
 *Built for the Binox Forward Deployed Engineer Assessment.*
