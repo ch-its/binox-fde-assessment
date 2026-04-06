@@ -15,14 +15,17 @@ Unlike static chatbots, this architecture implements an **"AI Flywheel"**—a se
 
 -----
 
-##  Architecture
+## Architecture Diagram
 
-The workflow follows a closed-loop architectural pattern:
-
-1.  **Fetch State:** Query the latest script version from Postgres.
-2.  **Execute:** Generate AI response and convert to speech via Deepgram.
-3.  **Analyze:** Extract objections into structured JSON.
-4.  **Optimize:** If the call failed, the "Director" agent patches the script and saves it as a new version.
+```mermaid
+graph TD
+    A[(Supabase: Fetch vLatest)] -->|system_prompt| B(AI Agent: Generates Pitch)
+    B --> C{Deepgram TTS}
+    C --> D[Analyst: Parses Transcript]
+    D --> E{Did the call fail?}
+    E -->|Yes: Extracts Objection| F(Sales Director: Rewrites Prompt)
+    F -->|Increments Version| G[(Supabase: Save vNew)]
+    E -->|No| H[End Cycle]
 
 -----
 
