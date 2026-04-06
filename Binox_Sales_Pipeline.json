@@ -93,7 +93,7 @@
           "parameters": [
             {
               "name": "Authorization",
-              "value": "Token 13dc26ec0cf4c5bba10cac433dd464b46787ff33"
+              "value": "Token DEEPGRAM API KEY"
             }
           ]
         },
