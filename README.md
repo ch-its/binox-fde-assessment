@@ -72,6 +72,14 @@ Create two tables in your public schema:
 
 -----
 
+## 📈 Future Scalability (Production Considerations)
+
+To scale this to a production environment and handle multi-turn conversations without overloading the database, I would implement the following updates:
+
+1. **Decouple the Loops:** Separate the real-time conversational loop (Frontend) from the asynchronous analytical loop (Backend).
+2. **Websockets vs. Webhooks:** Connect the AI Agent to a websocket for real-time interaction. Trigger the Analyst pipeline via a webhook *only* after the `call_status` hits 'completed' to prevent mid-conversation prompt mutation.
+3. **RAG Integration:** Instead of endlessly appending rebuttals to the main prompt, the Analyst would save successful rebuttals to a vector database, allowing the Agent to pull only relevant objection-handling logic in real-time.
+-----
 ## Demo & Proof of Execution
 
   * **Video Walkthrough:** [Loom Demo](https://www.loom.com/share/2ec3a817ecdb4fc19053db43ab490625)
