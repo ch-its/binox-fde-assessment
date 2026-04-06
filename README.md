@@ -43,7 +43,8 @@ For the scope of this prototype, the pipeline executes sequentially. However, to
 
 ## Demo & Proof of Execution
 
-* **Video Walkthrough:** [Insert Link to your Loom Video Here]
+* **Video Walkthrough:**
+https://www.loom.com/share/2ec3a817ecdb4fc19053db43ab490625 
 * **Workflow Canvas:**
 <img width="1086" height="322" alt="n8n architecture" src="https://github.com/user-attachments/assets/e7e55e35-132c-4d41-8f8b-fabba32ba58f" />
 
